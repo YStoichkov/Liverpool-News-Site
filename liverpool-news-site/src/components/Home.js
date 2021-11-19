@@ -1,6 +1,14 @@
-export function Home(){
-    return(
-        <main id="content" className="content" role="main">
+export function Home() {
+
+  const headerStyle = {
+    backgroundImage: 'url(/img/background-image.jpg)',
+  };
+  return (
+    <>
+      <header className="main-header " style={headerStyle}>
+        <a className="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span className="hidden">Scroll Down</span></a>
+      </header>,
+      <main id="content" className="content" role="main">
         <div className="wraps">
           <img src="/img/shadow.png" className="wrapshadow" />
           <div className="grid">
@@ -31,5 +39,6 @@ export function Home(){
           </nav>
         </div>
       </main>
-    )
+    </>
+  )
 }
