@@ -1,7 +1,15 @@
+import ReCAPTCHA from "react-google-recaptcha";
+import { useState } from "react";
+
 export function Contact() {
     const labelStyle = {
         color: 'white'
     };
+
+    const [isVerified, setVerification] = useState(false);
+    const handleOnChange = (value) => {
+        setVerification(true);
+    }
 
     return (
         <>
@@ -19,7 +27,11 @@ export function Contact() {
                         <input type="password" name="password" id="register-password" />
                         <label htmlFor="con-pass">Your Message:</label>
                         <textarea name="confirm-password" id="confirm-password" rows="15"></textarea>
-                        <input className="btn submit" type="submit" value="Contact Us" />
+                        <input className="btn submit" type="submit" value="Contact Us" disabled={!isVerified} />
+                        <ReCAPTCHA
+                            sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_v2} 
+                            onChange={handleOnChange}
+                        />
                     </div>
                 </form>
             </section>
