@@ -2,6 +2,7 @@ import { Route, Switch } from 'react-router-dom'
 import { Contact } from './components/Contact.js';
 
 import { Footer } from "./components/Footer.js";
+import { Gallery } from './components/Gallery.js';
 import { Home } from "./components/Home.js";
 import { Login } from './components/Login.js';
 import { Navigation } from "./components/Navigation.js";
@@ -17,6 +18,7 @@ function App() {
         <Route path='/' exact component={Home} />
         <Route path='/news' component={AllNews} />
         <Route path='/players' component={AllPlayers} />
+        <Route path='/gallery' component={Gallery} />
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         <Route path='/contact-us' component={Contact} />
