@@ -2418,18 +2418,31 @@ label[for="terms"]>input {
 
 
 
+.upload-image h1{
+	color:black;
+	font-family: Playfair Display;
+	font-style: italic;
+	text-align: center;
+	margin-top: 25px;
+	position: relative;
+}
 
-.loader {
-	border: 16px solid #f3f3f3;
-	border-radius: 50%;
-	border-top: 16px solid #3498db;
-	width: 120px;
-	height: 120px;
-	-webkit-animation: spin 2s linear infinite; /* Safari */
-	animation: spin 2s linear infinite;
-  }
-  
-  /* @keyframes spin {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
-  } */
+.btn{
+	background-color: black; 
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	margin-left: 15px;
+	cursor: pointer; 
+}
+
+.form-input{
+	position: relative;
+}
+
+

@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Image } from 'cloudinary-react';
+import Loading from '../components/Loading';
+
 
 export function Gallery() {
     const [fileInputState, setFileInputState] = useState('');
     const [previewSource, setPreviewSource] = useState('');
     const [imageIds, setImageIds] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
         previewFile(file);
 
     }
-
     const previewFile = (file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -19,7 +21,6 @@ export function Gallery() {
             setPreviewSource(reader.result);
         }
     }
-
     const handleSubmitFile = (e) => {
         e.preventDefault();
         if (!previewSource) {
@@ -27,7 +28,6 @@ export function Gallery() {
         }
         uploadImage(previewSource);
     }
-
     const uploadImage = async (base64EncodedImage) => {
         try {
             await fetch('/gallery/upload', {
@@ -41,7 +41,6 @@ export function Gallery() {
             console.error(error);
         }
     }
-
     const loadImage = async () => {
         try {
             const res = await fetch('/gallery/images');
@@ -52,35 +51,33 @@ export function Gallery() {
         }
     }
     useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2500)
         loadImage()
     }, []);
 
-    console.log(imageIds)
-
     return (
         <>
-            <div>
+            <div className="upload-image">
                 <h1>Upload Image</h1>
-                <form onSubmit={handleSubmitFile} className="form">
+                <form onSubmit={handleSubmitFile} className="upload-image-form">
                     <input type="file" name="image" onChange={handleFileInputChange} value={fileInputState} className="form-input" />
                     <button className="btn" type="submit">Submit image</button>
                 </form>
                 {previewSource && (
-                    <img src={previewSource} alt="chosen image" style={{ height: '300px' }} />
+                    <>
+                        <h1>Preview image </h1>
+                        <img className="image-preview" src={previewSource} alt="chosen image" style={{ height: '300px' }} />
+                    </>
                 )}
             </div>
-            {/* <div className="loader"></div> */}
             <div className="container">
                 <div className="grid">
-                    {imageIds && imageIds.map((imageId, index) =>
-                        <Image
-                            key={index}
-                            cloudName="dqj4zmx97"
-                            publicId={imageId}
-                            width="300"
-                            crop="scale"
-                        />
-                    )}
+                    {isLoading == true
+                        ? <Loading />
+                        : imageIds.map((imageId, index) => <Image key={index} cloudName="dqj4zmx97" publicId={imageId} width="300" crop="scale" />)
+                    }
                 </div>
             </div>
         </>

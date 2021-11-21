@@ -14,7 +14,6 @@ app.get('/gallery/images', async (req, res) => {
         .sort_by('public_id', 'desc')
         .max_results(30)
         .execute();
-
     const publicIds = resources.map((file) => file.public_id);
     res.send(publicIds);
 })
