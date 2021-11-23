@@ -1466,6 +1466,7 @@ h2.widget-title {
 .site-footer {
 	position:relative;
 	margin:0rem 0 0 0;
+	margin-top: 130vh;
 	padding:4rem 15px;
 	font-size:1.3rem;
 	text-transform:uppercase;
@@ -2353,7 +2354,8 @@ label[for="female"] {
 input[type="nickname"],
 input[type="password"],
 input[type="number"],
-input[type="email"] {
+input[type="email"] ,
+input[type="text"] {
     background: #ecf0f3;
     padding: 30px;
     padding-left: 20px;
@@ -2444,5 +2446,6 @@ label[for="terms"]>input {
 .form-input{
 	position: relative;
 }
+
 
 

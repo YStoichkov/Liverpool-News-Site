@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, React } from 'react'
 import { Image } from 'cloudinary-react';
 import Loading from '../components/Loading';
-
 
 export function Gallery() {
     const [fileInputState, setFileInputState] = useState('');
@@ -37,6 +36,7 @@ export function Gallery() {
                     'Content-type': 'application/json'
                 }
             })
+            window.location.reload();
         } catch (error) {
             console.error(error);
         }
@@ -49,11 +49,12 @@ export function Gallery() {
         } catch (error) {
             console.error(error)
         }
-    }
+    };
+
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false);
-        }, 2500)
+        }, 2500);
         loadImage()
     }, []);
 
@@ -76,7 +77,9 @@ export function Gallery() {
                 <div className="grid">
                     {isLoading == true
                         ? <Loading />
-                        : imageIds.map((imageId, index) => <Image key={index} cloudName="dqj4zmx97" publicId={imageId} width="300" crop="scale" />)
+                        : imageIds.map((imageId, index) =>
+                            <Image key={index} cloudName="dqj4zmx97" publicId={imageId} width="300" crop="scale" className=".bg-image .hover-zoom" />
+                        )
                     }
                 </div>
             </div>
