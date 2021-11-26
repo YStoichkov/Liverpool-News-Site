@@ -11,8 +11,6 @@ router.post('/login', isGuest, async (req, res) => {
             email,
             password,
         });
-        // res.cookie(AUTH_COOKIE_NAME, token);
-
         res.status(200).json({ AUTH_COOKIE_NAME: token });
     } catch (error) {
         console.log(error);
@@ -31,13 +29,6 @@ router.post('/register', async (req, res) => {
             email,
             password,
         })
-        // let token = await authService.login({
-        //     firstName,
-        //     lastName,
-        //     email,
-        //     password,
-        // });
-        // res.cookie(AUTH_COOKIE_NAME, token);
         res.json({ msg: 'YES' })
     } catch (error) {
         console.log(error)

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, React } from 'react'
+import { useEffect, useState, React } from 'react'
 import { Image } from 'cloudinary-react';
 import Loading from '../components/Loading';
 

@@ -1,5 +1,4 @@
 import { useHistory } from 'react-router-dom'
-// import * as authService from '../../server/services/authService.js';
 
 export function Register() {
     const historyHook = useHistory();

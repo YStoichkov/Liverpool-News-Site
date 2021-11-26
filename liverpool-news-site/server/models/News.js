@@ -11,18 +11,26 @@ const newsSchema = new mongoose.Schema({
         required: true,
         minlength: 30
     },
-    image: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Image',
-    },
     creator: {
         type: mongoose.Types.ObjectId,
         ref: 'User'
     },
-    timestamps: true,
-});
+    image: {
+        type: String,
+        required: true
+    }
+}, { timestamps: true });
 
 
+newsSchema.virtual('imgSrc').get(function () {
+    let result = this.image.toString('base64');
+    result = result.replace('dataimage/pngbase64', '');
+    if (this.image != null && this.imgType != null) {
+
+        return `data:${this.imgType};base64,${result}`
+    }
+})
+newsSchema.set('toJSON', { getters: true });
 const News = mongoose.model('News', newsSchema);
 
 module.exports = News;

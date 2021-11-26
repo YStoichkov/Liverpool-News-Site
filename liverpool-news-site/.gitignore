@@ -26,5 +26,5 @@ yarn-error.log*
 .env
 
 #server constants
-constants.js
+server/constants.js
 

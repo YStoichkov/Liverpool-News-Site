@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 const playerSchema = new mongoose.Schema({
     firstName: {
@@ -33,7 +31,7 @@ const playerSchema = new mongoose.Schema({
         max: '2007-01-02'
     },
     description: {
-        type: string,
+        type: String,
         required: true,
         minlength: 30,
     },
@@ -53,23 +51,10 @@ const playerSchema = new mongoose.Schema({
         ref: 'User'
     },
     playerImage: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Image'
+        type: String,
+        required: true
     }
 })
-userSchema.pre('save', function (next) {
-    return bcrypt.hash(this.password, SALT_ROUNDS)
-        .then((hash) => {
-            this.password = hash;
-
-            return next();
-        })
-})
-
-userSchema.method('validatePassword', function (password) {
-    return bcrypt.compare(password, this.password);
-})
-
 
 const Player = mongoose.model('Player', playerSchema);
 

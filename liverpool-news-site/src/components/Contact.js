@@ -2,9 +2,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
 
 export function Contact() {
-    const labelStyle = {
-        color: 'white'
-    };
 
     const [isVerified, setVerification] = useState(false);
     const handleOnChange = (value) => {

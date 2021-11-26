@@ -1,7 +1,9 @@
 import { useHistory } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 
-export function Login() {
+const Login = ({
+  onLogin
+}) => {
   const historyHook = useHistory();
   const cookies = new Cookies();
 
@@ -25,6 +27,7 @@ export function Login() {
         .then(result => {
           let payload = Object.values(result)[0];
           cookies.set('auth_cookie', payload, { path: '/' });
+          onLogin(email);
           historyHook.push('/');
         })
     } catch (error) {
@@ -57,3 +60,5 @@ export function Login() {
     </>
   )
 }
+
+export default Login;

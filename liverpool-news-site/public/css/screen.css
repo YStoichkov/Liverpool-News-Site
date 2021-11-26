@@ -2355,7 +2355,8 @@ input[type="nickname"],
 input[type="password"],
 input[type="number"],
 input[type="email"] ,
-input[type="text"] {
+input[type="text"],
+input[type="date"] {
     background: #ecf0f3;
     padding: 30px;
     padding-left: 20px;

@@ -2,12 +2,20 @@ export function Home() {
 
   const headerStyle = {
     backgroundImage: 'url(/img/background-image.jpg)',
+    width: '100%',
   };
+
+  const downArrowStyle = {
+    color: 'black'
+  }
+
   return (
     <>
       <header className="main-header " style={headerStyle}>
-        <a className="scroll-down icon-arrow-left" href="#content" data-offset="-45"><span className="hidden">Scroll Down</span></a>
-      </header>,
+        <strong>
+          <a style={downArrowStyle} className="scroll-down icon-arrow-left" href="#content" data-offset="-35"></a>
+        </strong>
+      </header>
       <main id="content" className="content" role="main">
         <div className="wraps">
           <img src="/img/shadow.png" className="wrapshadow" />
@@ -33,10 +41,6 @@ export function Home() {
               </article>
             </div>
           </div>
-          <nav className="pagination" role="navigation">
-            <span className="page-number">Page 1 of 2</span>
-            <a className="older-posts" href="page2.html">Older Posts &rarr;</a>
-          </nav>
         </div>
       </main>
     </>
