@@ -1,8 +1,18 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import Cookies from 'universal-cookie'
+import { useJwt } from 'react-jwt'
+import Swal from 'sweetalert2'
+import { useHistory, Link } from 'react-router-dom'
+import * as newsService from '../../services/newsService.js'
 
-export function SingleNews({ match, location, history }) {
+export function SingleNews({ match }) {
     const [news, setNews] = useState({});
+    let cookies = new Cookies();
+    let authCookie = cookies.get('auth_cookie');
+    const { decodedToken, isExpired } = useJwt(authCookie);
+    let userId = decodedToken?._id;
+    let userFullName = decodedToken?.firstName + ' ' + decodedToken?.lastName;
+    let historyHook = useHistory();
 
     const headerStyle = {
         backgroundImage: 'url(/img/background-image.jpg)',
@@ -19,7 +29,52 @@ export function SingleNews({ match, location, history }) {
             .then(newsResult => {
                 setNews(newsResult);
             })
+
+
     }, [])
+
+    const onDeleteHandler = (e) => {
+        e.preventDefault();
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                container: 'swal-wide',
+                confirmButton: 'btn-danger',
+                cancelButton: 'btn-success'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure you want to delete this?',
+            text: "You won't be able to revert it!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let newsId = news._id;
+                newsService.deleteNews(newsId, userId)
+                    .then(() => {
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success',
+                        )
+                        historyHook.push('/news/all')
+                    })
+            } else if (
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                )
+            }
+        })
+    }
 
     return (
         <>
@@ -33,7 +88,9 @@ export function SingleNews({ match, location, history }) {
                         </div>
                         <section className="post-meta">
                             <time className="post-date" >{news.createdAt}</time> | <a className="scrolltocomments" href="#disqus_thread" />
-                            <span>Author: </span>
+                            <span>Author: {userFullName}</span>
+                            <button className="btn btn-warning" onClick={onDeleteHandler}>Delete News</button>
+                            <Link to={{ pathname: `/news/edit/${news._id}`, state: news }}><button className="btn btn-primary">Edit News</button></Link>
                         </section>
                     </div>
                 </div>
@@ -43,7 +100,7 @@ export function SingleNews({ match, location, history }) {
                     <img src="/img/shadow.png" className="wrapshadow" />
                     <article className="post featured">
                         <section className="post-content">
-                            <p>{news.content}</p>
+                            <p><strong>{news.content}</strong></p>
                         </section>
                     </article>
                 </div>

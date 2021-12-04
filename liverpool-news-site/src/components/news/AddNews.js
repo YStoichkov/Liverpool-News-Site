@@ -1,7 +1,7 @@
-import axios from 'axios'
 import Cookies from 'universal-cookie'
 import { useJwt } from 'react-jwt'
 import { useHistory } from 'react-router-dom';
+import * as newsService from '../../services/newsService.js'
 
 export function AddNews() {
     let cookies = new Cookies();
@@ -17,17 +17,20 @@ export function AddNews() {
         let content = formData.get('content');
         let image = formData.get('image');
 
-        let data = {
+        let newsData = {
             title,
             content,
             image,
             userId
         }
-        axios.post(`http://localhost:3001/news/add`, data).then(res => {
-            if (res.status === 200) {
-                historyHook.push('/news');
-            }
-        })
+        newsService.createNews(newsData)
+            .then(res => {
+                if (res == 'ok') {
+                    historyHook.push('/news/all')
+                } else {
+                    console.log('Error')
+                }
+            })
     }
 
     return (

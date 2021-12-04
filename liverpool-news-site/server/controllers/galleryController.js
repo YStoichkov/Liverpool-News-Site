@@ -11,7 +11,7 @@ router.get('/images', async (req, res) => {
     res.send(publicIds);
 });
 
-router.post('/gallery/upload', async (req, res) => {
+router.post('/upload', async (req, res) => {
     try {
         const fileStr = req.body.data;
         const uploadedResponse = await cloudinary.uploader.upload(fileStr, {

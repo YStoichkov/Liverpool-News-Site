@@ -1,26 +1,45 @@
 import axios from "axios";
+import Cookies from "universal-cookie";
+import { useJwt } from 'react-jwt'
+import { useHistory } from 'react-router-dom';
+import * as playerService from '../../services/playerService.js';
 
 export function AddPlayer() {
+    let historyHook = useHistory();
+    let cookies = new Cookies();
+    let authCookie = cookies.get('auth_cookie');
+    const { decodedToken, isExpired } = useJwt(authCookie);
+    let userId = decodedToken?._id;
     const onFormSubmit = (e) => {
         e.preventDefault();
         let formData = new FormData(e.currentTarget);
-        let { firstName, lastName, position, shirtNumber, dateOfBirth, signed, apperances, playerImage, description } = Object.fromEntries(formData);
+        let { firstName, lastName, position, shirtNumber, dateOfBirth, apperances, goals, playerImage, description } = Object.fromEntries(formData);
         let playerData = {
             firstName,
             lastName,
             position,
             shirtNumber,
             dateOfBirth,
-            signed,
             apperances,
+            goals,
             playerImage,
-            description
+            description,
+            userId,
         }
-        axios.post(`http://localhost:3001/players/add`, playerData).then(res => {
-            if (res.status === 200) {
-                // historyHook.push('/news');
-            }
-        })
+        playerService.createPlayer(playerData)
+            .then(res => {
+                if (res == 'ok') {
+                    historyHook.push('/players/all')
+                } else {
+                    console.log('Error')
+                }
+            })
+
+        // axios.post(`http://localhost:3001/players/add`, playerData).then(res => {
+        //     if (res.status === 200) {
+        //         historyHook.push('/players/all');
+        //     }
+        // })
     }
 
     return (
@@ -41,8 +60,6 @@ export function AddPlayer() {
                         <input type="text" id="shirtNumber" name="shirtNumber" />
                         <label htmlFor="dateOfBirth">Date Of Birth</label>
                         <input type="date" id="dateOfBirth" name="dateOfBirth" />
-                        <label htmlFor="signed">Signed</label>
-                        <input type="text" id="signed" name="signed" />
                         <label htmlFor="apperances">Apperances:</label>
                         <input type="text" name="apperances" id="apperances" />
                         <label htmlFor="goals">Goals</label>

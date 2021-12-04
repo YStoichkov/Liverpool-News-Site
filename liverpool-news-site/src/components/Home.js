@@ -1,48 +1,35 @@
-export function Home() {
+import { useState, useEffect } from 'react';
+import * as newsService from '../services/newsService.js';
+import { LatestNews } from '../components/news/LatestNews.js'
 
+export function Home() {
+  const [latestNews, setNews] = useState([]);
   const headerStyle = {
     backgroundImage: 'url(/img/background-image.jpg)',
     width: '100%',
   };
 
-  const downArrowStyle = {
-    color: 'black'
-  }
+  useEffect(() => {
+    newsService.latestNews()
+      .then(latest => {
+        setNews(latest)
+      })
+  }, []);
 
   return (
     <>
       <header className="main-header " style={headerStyle}>
-        <strong>
-          <a style={downArrowStyle} className="scroll-down icon-arrow-left" href="#content" data-offset="-35"></a>
-        </strong>
-      </header>
-      <main id="content" className="content" role="main">
-        <div className="wraps">
-          <img src="/img/shadow.png" className="wrapshadow" />
-          <div className="grid">
-            <div className="grid-item">
-              <article className="post">
-                <div className="wrapgriditem">
-                  <header className="post-header">
-                    <h2 className="post-title"><a href="article.html">Retro &amp; New</a></h2>
-                  </header>
-                  <section className="post-excerpt">
-                    <p>
-                      The house of Dr. Marsh being fully occupied, we made our beds in a shed, a short distance from it.
-                      Suspended from one of the poles <a className="read-more" href="/retro-is-the-new-modern/">&raquo;</a>
-                    </p>
-                  </section>
-                  <footer className="post-meta">
-                    <img className="author-thumb" src="/img/gravatar.jpg" alt="David" nopin="nopin" />
-                    <a href="author.html">David</a>
-                    <time className="post-date" dateTime="2016-12-18">18 December 2016</time>
-                  </footer>
-                </div>
-              </article>
+        <main>
+          <div className="shell">
+            <div className="container">
+            <h1 className="text center">Latest News</h1>
+              <div className="row">
+                {latestNews.map(x => <LatestNews latestNews={x} key={x._id} />)}
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </header>
     </>
   )
 }

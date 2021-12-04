@@ -29,14 +29,15 @@ export function Gallery() {
     }
     const uploadImage = async (base64EncodedImage) => {
         try {
-            await fetch('/gallery/upload', {
+            await fetch('http://localhost:3001/gallery/upload', {
                 method: 'POST',
                 body: JSON.stringify({ data: base64EncodedImage }),
                 headers: {
                     'Content-type': 'application/json'
                 }
+            }).then(res => {
+                window.location.reload();
             })
-            window.location.reload();
         } catch (error) {
             console.error(error);
         }
@@ -69,16 +70,16 @@ export function Gallery() {
                 {previewSource && (
                     <>
                         <h1>Preview image </h1>
-                        <img className="image-preview" src={previewSource} alt="chosen image" style={{ height: '300px' }} />
+                        <img className="image-preview" src={previewSource} alt="chosen" style={{ height: '300px' }} />
                     </>
                 )}
             </div>
             <div className="container">
                 <div className="grid">
-                    {isLoading == true
+                    {isLoading === true
                         ? <Loading />
                         : imageIds.map((imageId, index) =>
-                            <Image key={index} cloudName="dqj4zmx97" publicId={imageId} width="300" crop="scale" className=".bg-image .hover-zoom" />
+                            <Image key={index} cloudName="dqj4zmx97" publicId={imageId} width="300" crop="scale" className=".bg-image .hover-zoom" alt="image"/>
                         )
                     }
                 </div>

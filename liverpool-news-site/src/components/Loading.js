@@ -11,7 +11,7 @@ const Loading = () => {
         <div align='center'>
             <p style={pStyle}>Loading...</p>
             <Loader
-                type="Bars"
+                type="Circles"
                 color="red"
                 height={100}
                 width={100}

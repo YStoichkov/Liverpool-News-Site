@@ -3,24 +3,28 @@ import { Link } from "react-router-dom"
 export function NewsCard({
     news
 }) {
+
     return (
-        <div className="grid-item">
-            <article className="post">
-                <Link to={`/news/details/${news._id}`}><img src={news.image} /></Link>
-                <div className="wrapgriditem">
-                    <header className="post-header">
-                        <h2 className="post-title"><Link to={`/news/details/${news._id}`}>{news.title}</Link></h2>
-                    </header>
-                    <section className="post-excerpt">
-                        <p>
-                            {news.content} <a className="read-more" href="/this-is-a-test/">&raquo; </a>
-                        </p>
-                    </section>
-                    <footer className="post-meta">
-                        <time className="post-date" dateTime="2015-12-13">Created At: {news.createdAt}</time>
-                    </footer>
+        <div className="column">
+            <div className="wsk-cp-product">
+                <div className="wsk-cp-img">
+                    <Link to={`/news/details/${news._id}`}> <img src={news.image} alt="News Image" className="img-responsive" /></Link>
                 </div>
-            </article>
+                <div className="wsk-cp-text">
+                    <div className="category">
+                        <span><Link to={`/news/details/${news._id}`}>Read more</Link></span>
+                    </div>
+                    <div className="title-product">
+                        <h3>{news.title}</h3>
+                    </div>
+                    <div className="description-prod">
+                        <p>{news.createdAt}</p>
+                    </div>
+                    <div className="card-footer">
+                        <div className="wcf-left"><span className="price">Author: </span></div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

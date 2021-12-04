@@ -37,7 +37,7 @@ exports.isGuest = function (req, res, next) {
         res.redirect('/');
     }
 }
-// exports.isAuthor = async function (req, res, next) {
+// exports.isCreator = async function (req, res, next) {
 //     let post = await postService.getOne(req.params.postId);
 //     if (post.author == req.user?._id) {
 //         next();

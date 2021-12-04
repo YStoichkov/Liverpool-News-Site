@@ -35,10 +35,6 @@ const playerSchema = new mongoose.Schema({
         required: true,
         minlength: 30,
     },
-    signed: {
-        type: Date,
-        required: true,
-    },
     apperances: {
         type: Number,
         required: true,

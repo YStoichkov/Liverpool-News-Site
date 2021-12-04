@@ -16,7 +16,6 @@ export function Navigation({
 
     let guestNavigation = (
         <>
-            <li className="nav-article-example" role="presentation"><NavLink to="/history">Club history</NavLink></li>
             <li className="nav-about-us" role="presentation"><NavLink to="/login">Login</NavLink></li>
             <li className="nav-author-page" role="presentation"><NavLink to="/register">Register</NavLink></li>
         </>
@@ -32,10 +31,7 @@ export function Navigation({
                         guestNavigation
                     }
                     <span className="socialheader">
-                        <a href="#"><span className='symbol'>circletwitterbird</span></a>
                         <a href="#"><span className='symbol'>circlefacebook</span></a>
-                        <a href="#"><span className='symbol'>circlegoogleplus</span></a>
-                        <a href="mailto:wowthemesnet@gmail.com"><span className='symbol'>circleemail</span></a>
                     </span>
                 </ul>
             </nav >
