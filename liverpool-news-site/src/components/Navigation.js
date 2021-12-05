@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom'
+import { AuthContext } from '../contexts/AuthContext.js';
+import { useContext } from 'react'
 
-export function Navigation({
-    isAuthenticated,
-    user
-}) {
+export function Navigation() {
+    const { user } = useContext(AuthContext);
     let userNavigation = (
         <>
             <li className="nav-home nav-current" role="presentation"><NavLink to="/news/all">News</NavLink></li>
@@ -26,13 +26,10 @@ export function Navigation({
             <nav className="main-nav overlay clearfix">
                 <NavLink className="blog-logo" to="/"><img src="/img/navbar-logo.jpg" alt="Fashion Critiques" /></NavLink>
                 <ul id="menu">
-                    {isAuthenticated ?
+                    {user ?
                         userNavigation :
                         guestNavigation
                     }
-                    <span className="socialheader">
-                        <a href="#"><span className='symbol'>circlefacebook</span></a>
-                    </span>
                 </ul>
             </nav >
         </>

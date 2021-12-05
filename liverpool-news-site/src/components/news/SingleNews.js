@@ -9,7 +9,7 @@ export function SingleNews({ match }) {
     const [news, setNews] = useState({});
     let cookies = new Cookies();
     let authCookie = cookies.get('auth_cookie');
-    const { decodedToken, isExpired } = useJwt(authCookie);
+    const { decodedToken } = useJwt(authCookie);
     let userId = decodedToken?._id;
     let userFullName = decodedToken?.firstName + ' ' + decodedToken?.lastName;
     let historyHook = useHistory();
@@ -79,7 +79,7 @@ export function SingleNews({ match }) {
     return (
         <>
             <header className="main-header post-head" style={headerStyle}>
-                <img src={news.image} style={imageStyle} />
+                <img src={news.image} style={imageStyle} alt="single-news" />
                 <div className="vertical">
                     <div className="main-header-content inner">
                         <h1 className="post-title">{news.title}</h1>
@@ -87,7 +87,7 @@ export function SingleNews({ match }) {
                             <span></span><span></span><span></span>
                         </div>
                         <section className="post-meta">
-                            <time className="post-date" >{news.createdAt}</time> | <a className="scrolltocomments" href="#disqus_thread" />
+                            <time className="post-date" >Added: {news.createdAt}</time>
                             <span>Author: {userFullName}</span>
                             <button className="btn btn-warning" onClick={onDeleteHandler}>Delete News</button>
                             <Link to={{ pathname: `/news/edit/${news._id}`, state: news }}><button className="btn btn-primary">Edit News</button></Link>
@@ -97,7 +97,7 @@ export function SingleNews({ match }) {
             </header>
             <main id="content" className="content" role="main">
                 <div className="wraps">
-                    <img src="/img/shadow.png" className="wrapshadow" />
+                    <img src="/img/shadow.png" className="wrapshadow" alt="shadow" />
                     <article className="post featured">
                         <section className="post-content">
                             <p><strong>{news.content}</strong></p>

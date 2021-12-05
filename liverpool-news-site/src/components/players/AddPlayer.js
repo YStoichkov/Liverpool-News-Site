@@ -1,4 +1,3 @@
-import axios from "axios";
 import Cookies from "universal-cookie";
 import { useJwt } from 'react-jwt'
 import { useHistory } from 'react-router-dom';

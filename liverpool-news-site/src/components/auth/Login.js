@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
-import Cookies from 'universal-cookie'
 import * as authService from '../../services/authService.js'
+import { AuthContext } from '../../contexts/AuthContext.js'
+import { useContext } from 'react'
 
-const Login = ({
-  onLogin
-}) => {
+const Login = () => {
+  const { login } = useContext(AuthContext);
   const [isValid, setValid] = useState(false)
   const historyHook = useHistory();
-  const cookies = new Cookies();
+  // const cookies = new Cookies();
 
   const onLoginHandler = async (e) => {
     e.preventDefault();
@@ -17,12 +17,11 @@ const Login = ({
       let email = formData.get('email');
       let password = formData.get('password');
 
-      if (email != '' && password != '') {
+      if (email !== '' && password !== '') {
         authService.login({ email, password })
           .then(result => {
             let payload = Object.values(result)[0];
-            cookies.set('auth_cookie', payload, { path: '/' });
-            onLogin(email);
+            login(payload)
             historyHook.push('/');
           })
       } else {

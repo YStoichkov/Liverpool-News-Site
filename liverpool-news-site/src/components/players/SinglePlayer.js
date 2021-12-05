@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Swal from 'sweetalert2'
-import axios from "axios";
 import { useJwt } from 'react-jwt'
 import Cookies from 'universal-cookie'
 import { useHistory, Link } from "react-router-dom";

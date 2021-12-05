@@ -1,12 +1,14 @@
+import { useContext, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import Cookies from 'universal-cookie';
+import { AuthContext } from '../../contexts/AuthContext.js';
 
-const Logout = ({
-    onLogout
-}) => {
-    const cookies = new Cookies();
-    cookies.remove('auth_cookie');
-    onLogout();
+const Logout = () => {
+    const { logout } = useContext(AuthContext)
+
+    useEffect(() => {
+        logout();
+    })
+
     return (
         <Redirect to='/' />
     )

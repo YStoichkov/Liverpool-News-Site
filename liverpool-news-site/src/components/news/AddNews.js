@@ -6,7 +6,7 @@ import * as newsService from '../../services/newsService.js'
 export function AddNews() {
     let cookies = new Cookies();
     let authCookie = cookies.get('auth_cookie');
-    const { decodedToken, isExpired } = useJwt(authCookie);
+    const { decodedToken } = useJwt(authCookie);
     let userId = decodedToken?._id;
 
     let historyHook = useHistory();
@@ -25,7 +25,7 @@ export function AddNews() {
         }
         newsService.createNews(newsData)
             .then(res => {
-                if (res == 'ok') {
+                if (res === 'ok') {
                     historyHook.push('/news/all')
                 } else {
                     console.log('Error')

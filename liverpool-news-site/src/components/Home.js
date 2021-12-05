@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as newsService from '../services/newsService.js';
 import { LatestNews } from '../components/news/LatestNews.js'
+import { LeagueTable } from './LeagueTable.js';
 
 export function Home() {
   const [latestNews, setNews] = useState([]);
@@ -22,7 +23,7 @@ export function Home() {
         <main>
           <div className="shell">
             <div className="container">
-            <h1 className="text center">Latest News</h1>
+              <h1 className="text center">Latest News</h1>
               <div className="row">
                 {latestNews.map(x => <LatestNews latestNews={x} key={x._id} />)}
               </div>
@@ -30,6 +31,7 @@ export function Home() {
           </div>
         </main>
       </header>
+      {/* <LeagueTable /> */}
     </>
   )
 }

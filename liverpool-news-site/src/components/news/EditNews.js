@@ -19,7 +19,7 @@ export function EditNews({
         }
         newsService.editNews(newsData, newsId)
             .then(res => {
-                if (res == 'ok') {
+                if (res === 'ok') {
                     historyHook.push('/news/all')
                 } else {
                     console.log('Error')

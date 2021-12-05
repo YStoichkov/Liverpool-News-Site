@@ -1,5 +1,4 @@
 const baseUrl = `http://localhost:3001`;
-
 exports.login = async ({ email, password }) => {
     let res = await fetch(`${baseUrl}/login`, {
         method: 'POST',
@@ -29,6 +28,12 @@ exports.register = async (user) => {
     return jsonResult;
 }
 
-exports.isCreator = (userId, newsId, playerId) => {
-    
+exports.isLoggedIn = () => {
+    // let cookie = new Cookies();
+
+    // let result = cookie.get('auth_cookie');
+
+
+    // return result;
 }
+

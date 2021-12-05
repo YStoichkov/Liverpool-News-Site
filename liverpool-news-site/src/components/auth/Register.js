@@ -16,7 +16,7 @@ export function Register() {
                 email,
                 password,
             }
-            if (firstName != '' && lastName != '' && email != '' && password != '' && password == rePass) {
+            if (firstName !== '' && lastName !== '' && email !== '' && password !== '' && password == rePass) {
                 authService.register(user)
                     .then(res => {
                         historyHook.push('/login');

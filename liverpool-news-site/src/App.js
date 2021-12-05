@@ -1,7 +1,4 @@
-import { Route, Switch, Redire } from 'react-router-dom'
-import { useState, useEffect } from 'react';
-import Cookies from 'universal-cookie';
-
+import { Route, Switch } from 'react-router-dom'
 import { Contact } from './components/Contact.js';
 import { Gallery } from './components/Gallery.js';
 import { Home } from "./components/Home.js";
@@ -19,59 +16,48 @@ import { SinglePlayer } from './components/players/SinglePlayer.js';
 import { EditNews } from './components/news/EditNews.js';
 import { Error } from './components/Error.js';
 import { EditPlayer } from './components/players/EditPlayer.js';
+import { AuthContext } from './contexts/AuthContext.js';
+import useCookie from './hooks/useCookie.js'
+
 
 function App() {
-  let cookies = new Cookies();
-  const [userInfo, setUserInfo] = useState({ isAuthenticated: false, username: '' });
+  const [user, setUser] = useCookie();
 
-  useEffect(() => {
-    let user = cookies.get('auth_cookie');
-
-    setUserInfo({
-      isAuthenticated: Boolean(user),
-      user
-    })
-  }, []);
-
-  const onLogin = (username) => {
-    setUserInfo({
-      isAuthenticated: true,
-      user: username
-    })
+  const login = (authData) => {
+    setUser(authData);
   }
 
-  const onLogout = () => {
-    setUserInfo({
-      isAuthenticated: false,
-      user: ''
-    })
+  const logout = () => {
+    setUser();
   }
 
   return (
-    <div>
-      <div id="container">
-        <Navigation {...userInfo} />
-        <main id="site-content"></main>
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path='/news/all' component={AllNews} />
-          <Route path='/news/add' exact component={AddNews} />
-          <Route path='/news/details/:newsId' exact component={SingleNews} />
-          <Route path='/news/edit/:newsId' exact component={EditNews} />
-          <Route path='/players/all' component={AllPlayers} />
-          <Route path='/add-player' component={AddPlayer} />
-          <Route path='/players/details/:playerId' component={SinglePlayer} />
-          <Route path='/players/edit/:playerId' component={EditPlayer} />
-          <Route path='/gallery' component={Gallery} />
-          <Route path='/login' component={() => <Login onLogin={onLogin} />} />
-          <Route path='/logout' component={() => <Logout onLogout={onLogout} />} />
-          <Route path='/register' component={Register} />
-          <Route path='/contact-us' component={Contact} />
-          <Route path='*' component={Error} />
-        </Switch>
-        <Footer />
+    <AuthContext.Provider value={{ user, login, logout }}>
+      <div>
+        <div id="container">
+          <Navigation />
+          <main id="site-content"></main>
+          <Switch>
+            <Route path='/' exact component={Home} />
+            <Route path='/news/all' component={() => <AllNews />} />
+            <Route path='/news/add' exact component={AddNews} />
+            <Route path='/news/details/:newsId' exact component={SingleNews} />
+            <Route path='/news/edit/:newsId' exact component={EditNews} />
+            <Route path='/players/all' component={AllPlayers} />
+            <Route path='/add-player' component={AddPlayer} />
+            <Route path='/players/details/:playerId' component={SinglePlayer} />
+            <Route path='/players/edit/:playerId' component={EditPlayer} />
+            <Route path='/gallery' component={Gallery} />
+            <Route path='/login' component={() => <Login />} />
+            <Route path='/logout' component={() => <Logout />} />
+            <Route path='/register' component={Register} />
+            <Route path='/contact-us' component={Contact} />
+            <Route path='*' component={Error} />
+          </Switch>
+          <Footer />
+        </div>
       </div>
-    </div>
+    </AuthContext.Provider>
   );
 }
 export default App;
