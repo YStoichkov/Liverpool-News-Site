@@ -1,26 +1,21 @@
 import { Table, Button, Modal, Input, Form } from 'antd'
 import 'antd/dist/antd.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 export function LeagueTable() {
     const [isEditing, setIsEditing] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
     const [editingTeam, setEditingTeam] = useState(null);
-    const [dataSource, setDataSource] = useState([
-        {
-            id: 1,
-            position: 1,
-            team: 'Liverpool',
-            played: 3,
-            wins: 3,
-            draws: 0,
-            loses: 0,
-            goalsScored: 10,
-            goalsAgainst: 0,
-            difference: '+10',
-            points: 9,
-        },
-    ])
+    const [addingTeam, setAddingTeam] = useState(null);
+    const [dataSource, setDataSource] = useState([])
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/teams/all`)
+            .then(res => res.json())
+            .then(teams => setDataSource(teams));
+    }, [setIsEditing]);
+
     const columns = [
         {
             key: '1',
@@ -30,7 +25,7 @@ export function LeagueTable() {
         {
             key: '2',
             title: 'Team',
-            dataIndex: 'team'
+            dataIndex: 'teamName'
         },
         {
             key: '3',
@@ -78,34 +73,13 @@ export function LeagueTable() {
             render: (record) => {
                 return (
                     <>
-                        <EditOutlined onClick={() => onEditStudent(record)} />
+                        <EditOutlined onClick={() => onEditTeam(record)} />
                         <DeleteOutlined onClick={() => onDeleteTeam(record)} style={{ color: 'red', marginLeft: 12 }} />
                     </>
                 )
             }
         }
     ]
-
-    const onAddTeam = () => {
-        const randomNumber = parseInt(Math.random() * 1000)
-        const newTeam = {
-            id: randomNumber,
-            number: 1,
-            team: 'Liverpool',
-            played: 3,
-            wins: 3,
-            draws: 0,
-            loses: 0,
-            goalsScored: 10,
-            goalsAgainst: 0,
-            difference: '+10',
-            points: 9,
-        };
-
-        setDataSource(pre => {
-            return [...pre, newTeam]
-        })
-    }
 
     const onDeleteTeam = (record) => {
         Modal.confirm({
@@ -120,7 +94,7 @@ export function LeagueTable() {
         })
     }
 
-    const onEditStudent = (record) => {
+    const onEditTeam = (record) => {
         setIsEditing(true);
         setEditingTeam({ ...record });
     }
@@ -130,11 +104,9 @@ export function LeagueTable() {
         setEditingTeam(null);
     }
 
-
     return (
         <>
-            <Button onClick={onAddTeam}>Add teams</Button>
-            <Table columns={columns} dataSource={dataSource}></Table>
+            <Table columns={columns} dataSource={dataSource} pagination={false} rowKey="_id" ></Table>
             <Modal
                 title='Edit team'
                 visible={isEditing}
@@ -143,18 +115,36 @@ export function LeagueTable() {
                     resetEditing()
                 }}
                 onOk={() => {
-                    setDataSource(pre => {
-                        return pre.map(team => {
-                            if (team.id === editingTeam.id) {
-                                return editingTeam;
-                            } else {
-                                return team;
-                            }
+                    setDataSource(() => {
+                        let teamId = editingTeam._id;
+                        let teamData = {
+                            teamName: editingTeam.teamName,
+                            position: editingTeam.position,
+                            wins: editingTeam.wins,
+                            points: editingTeam.points,
+                            played: editingTeam.played,
+                            loses: editingTeam.loses,
+                            goalsScored: editingTeam.goalsScored,
+                            goalsAgainst: editingTeam.goalsAgainst,
+                            draws: editingTeam.draws,
+                            difference: editingTeam.difference
+                        };
+                        fetch(`http://localhost:3001/teams/edit/${teamId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/json'
+                            },
+                            body: JSON.stringify(teamData)
                         })
+                            .then(res => res.json())
+                            .then(teams => {
+                                return setDataSource(teams)
+                            })
                     })
+                    resetEditing()
                 }}
             >
-                <Form>
+                <Form >
                     <Input value={editingTeam?.position} addonBefore='Position' onChange={(e) => setEditingTeam((pre) => { return { ...pre, position: e.target.value } })} />
                     <Input value={editingTeam?.played} addonBefore='Played' onChange={(e) => setEditingTeam((pre) => { return { ...pre, played: e.target.value } })} />
                     <Input value={editingTeam?.wins} addonBefore='Wins' onChange={(e) => setEditingTeam((pre) => { return { ...pre, wins: e.target.value } })} />

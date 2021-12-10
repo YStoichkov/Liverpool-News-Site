@@ -2,8 +2,9 @@ import Cookies from "universal-cookie";
 import { useJwt } from 'react-jwt'
 import { useHistory } from 'react-router-dom';
 import * as playerService from '../../services/playerService.js';
+import { isAuth } from "../../hoc/isAuth.js";
 
-export function AddPlayer() {
+const AddPlayer = () => {
     let historyHook = useHistory();
     let cookies = new Cookies();
     let authCookie = cookies.get('auth_cookie');
@@ -27,18 +28,12 @@ export function AddPlayer() {
         }
         playerService.createPlayer(playerData)
             .then(res => {
-                if (res == 'ok') {
+                if (res === 'ok') {
                     historyHook.push('/players/all')
                 } else {
                     console.log('Error')
                 }
             })
-
-        // axios.post(`http://localhost:3001/players/add`, playerData).then(res => {
-        //     if (res.status === 200) {
-        //         historyHook.push('/players/all');
-        //     }
-        // })
     }
 
     return (
@@ -74,3 +69,5 @@ export function AddPlayer() {
         </>
     )
 }
+
+export default isAuth(AddPlayer)

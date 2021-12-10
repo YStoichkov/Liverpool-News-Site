@@ -2265,14 +2265,8 @@ div#preloader {
 }
 
 
-
-
-
-
-
-
-
 #login-page {
+	margin-top: auto;
     position: relative;
     width: 650px;
     height: auto;
@@ -2285,6 +2279,7 @@ div#preloader {
 }
 
 #register-page {
+	margin-top: auto;
     position: relative;
     width: 650px;
     height: auto;
@@ -2710,4 +2705,31 @@ a.buy-btn{
   background: #FF9800;
   color: #fff;
 }
+}
+
+.center{
+	margin: auto;
+	width: 50%;
+	padding: 10px;
+}
+
+
+.errorField>span {
+    position: inherit;
+    font-size: 45px;
+    bottom: 17px;
+    right: 8px;
+    text-decoration: none;
+    color: black;
+    background: rgb(189, 64, 40);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+
+.premLeagueBadge {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 15%;
 }

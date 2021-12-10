@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Player = require('../models/Player.js');
+// const Player = require('../models/Player.js');
 const playerService = require('../services/playerService.js')
 
 router.post('/add', async (req, res) => {

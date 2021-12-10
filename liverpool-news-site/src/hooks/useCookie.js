@@ -1,18 +1,16 @@
 import { useState } from "react";
 import Cookies from "universal-cookie";
 
-const useCookie = (initialValue) => {
-    const cookies = new Cookies();
+const cookies = new Cookies();
+const useCookie = (key, initialValue) => {
     const [state, setState] = useState(() => {
         try {
-            let item = cookies.get('auth_cookie');
-
-            return item ? JSON.parse(item) : initialValue
+            let item = cookies.get(key);
+            return item ? item : initialValue
         } catch (error) {
             return initialValue
         }
     });
-
     const setItem = (value) => {
         try {
             cookies.set('auth_cookie', value, { path: '/' });
@@ -21,7 +19,6 @@ const useCookie = (initialValue) => {
 
         }
     }
-
     return [
         state,
         setItem,

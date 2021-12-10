@@ -4,8 +4,9 @@ import { useJwt } from 'react-jwt'
 import Cookies from 'universal-cookie'
 import { useHistory, Link } from "react-router-dom";
 import * as playerService from '../../services/playerService.js'
+import { isAuth } from '../../hoc/isAuth.js'
 
-export function SinglePlayer({ match }) {
+const SinglePlayer = ({ match }) => {
     let [player, setPlayer] = useState([]);
     let cookies = new Cookies();
     let authCookie = cookies.get('auth_cookie');
@@ -48,7 +49,6 @@ export function SinglePlayer({ match }) {
                     userId
                 }
                 playerService.deletePlayer(data)
-                // axios.post(`http://localhost:3001/players/delete/${playerId}`, data)
                     .then(res => {
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
@@ -74,6 +74,10 @@ export function SinglePlayer({ match }) {
         await fetch(`http://localhost:3001/players/details/${playerId}`)
             .then(res => res.json())
             .then(playerResult => {
+                let dateStringFormat = playerResult.dateOfBirth;
+                let date = new Date(dateStringFormat);
+                let result = date.toDateString();
+                playerResult.dateOfBirth = result;
                 setPlayer(playerResult);
             })
     }, [])
@@ -116,5 +120,6 @@ export function SinglePlayer({ match }) {
             </main >
         </>
     )
-
 }
+
+export default isAuth(SinglePlayer)

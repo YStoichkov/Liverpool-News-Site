@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
+import { isAuth } from '../../hoc/isAuth.js'
 import { AuthContext } from '../../contexts/AuthContext.js';
 
 const Logout = () => {
@@ -14,4 +15,4 @@ const Logout = () => {
     )
 }
 
-export default Logout;
+export default isAuth(Logout);

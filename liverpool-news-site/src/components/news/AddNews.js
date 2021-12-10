@@ -2,11 +2,13 @@ import Cookies from 'universal-cookie'
 import { useJwt } from 'react-jwt'
 import { useHistory } from 'react-router-dom';
 import * as newsService from '../../services/newsService.js'
+import { isAuth } from '../../hoc/isAuth.js'
+import { Button } from 'react-bootstrap'
 
-export function AddNews() {
+const AddNews = () => {
     let cookies = new Cookies();
     let authCookie = cookies.get('auth_cookie');
-    const { decodedToken } = useJwt(authCookie);
+    const { decodedToken } = useJwt(authCookie.AUTH_COOKIE_NAME);
     let userId = decodedToken?._id;
 
     let historyHook = useHistory();
@@ -36,9 +38,6 @@ export function AddNews() {
     return (
         <>
             <br />
-            <br />
-            <br />
-            <br />
             <section id="register-page" className="content auth" method="POST">
                 <form id="register" onSubmit={onNewsSubmitHandler} >
                     <div className="container">
@@ -56,3 +55,5 @@ export function AddNews() {
         </>
     )
 }
+
+export default isAuth(AddNews)

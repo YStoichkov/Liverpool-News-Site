@@ -1,50 +1,51 @@
 import { Route, Switch } from 'react-router-dom'
 import { Contact } from './components/Contact.js';
-import { Gallery } from './components/Gallery.js';
+import Gallery from './components/Gallery.js';
 import { Home } from "./components/Home.js";
 import Login from './components/auth/Login.js';
 import Logout from './components/auth/Logout.js';
 import { Navigation } from "./components/Navigation.js";
-import { AllNews } from './components/news/AllNews.js';
-import { AllPlayers } from './components/players/AllPlayers.js';
-import { Register } from './components/auth/Register.js';
+import AllNews from './components/news/AllNews.js';
+import AllPlayers from './components/players/AllPlayers.js';
+import Register from './components/auth/Register.js';
 import { Footer } from './components/Footer.js';
-import { AddPlayer } from './components/players/AddPlayer.js';
-import { AddNews } from './components/news/AddNews.js';
-import { SingleNews } from './components/news/SingleNews.js';
-import { SinglePlayer } from './components/players/SinglePlayer.js';
-import { EditNews } from './components/news/EditNews.js';
+import AddPlayer from './components/players/AddPlayer.js';
+import AddNews from './components/news/AddNews.js';
+import SingleNews from './components/news/SingleNews.js';
+import SinglePlayer from './components/players/SinglePlayer.js';
+import EditNews from './components/news/EditNews.js';
 import { Error } from './components/Error.js';
-import { EditPlayer } from './components/players/EditPlayer.js';
+import EditPlayer from './components/players/EditPlayer.js';
 import { AuthContext } from './contexts/AuthContext.js';
 import useCookie from './hooks/useCookie.js'
 
+const initialAuthState = '';
 
 function App() {
-  const [user, setUser] = useCookie();
+  const [user, setUser] = useCookie('auth_cookie', initialAuthState);
 
   const login = (authData) => {
     setUser(authData);
   }
 
   const logout = () => {
-    setUser();
+    setUser(initialAuthState);
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: Boolean(user) }}>
       <div>
         <div id="container">
           <Navigation />
           <main id="site-content"></main>
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/news/all' component={() => <AllNews />} />
+            <Route path='/news/all' component={AllNews} />
             <Route path='/news/add' exact component={AddNews} />
             <Route path='/news/details/:newsId' exact component={SingleNews} />
             <Route path='/news/edit/:newsId' exact component={EditNews} />
             <Route path='/players/all' component={AllPlayers} />
-            <Route path='/add-player' component={AddPlayer} />
+            <Route path='/players/add' component={AddPlayer} />
             <Route path='/players/details/:playerId' component={SinglePlayer} />
             <Route path='/players/edit/:playerId' component={EditPlayer} />
             <Route path='/gallery' component={Gallery} />

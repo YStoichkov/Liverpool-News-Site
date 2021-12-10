@@ -1,14 +1,8 @@
 import { Link } from "react-router-dom"
-import { useJwt } from 'react-jwt'
-import Cookies from 'universal-cookie'
 
 export function NewsCard({
     news
 }) {
-    let cookies = new Cookies();
-    let authCookie = cookies.get('auth_cookie');
-    const { decodedToken } = useJwt(authCookie);
-    let userFullName = decodedToken?.firstName + ' ' + decodedToken?.lastName;
     return (
         <div className="column">
             <div className="wsk-cp-product">
@@ -26,7 +20,7 @@ export function NewsCard({
                         <p>{news.createdAt}</p>
                     </div>
                     <div className="card-footer">
-                        <div className="wcf-left"><span className="price">Author: {userFullName} </span></div>
+                        <div className="wcf-left"><span className="price">Author: {news.creatorFullName} </span></div>
                     </div>
                 </div>
             </div>

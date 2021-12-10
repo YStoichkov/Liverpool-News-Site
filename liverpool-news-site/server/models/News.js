@@ -18,6 +18,20 @@ const newsSchema = new mongoose.Schema({
     image: {
         type: String,
         required: true
+    },
+    peopleLikedOrDisliked: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    likes: {
+        type: Number,
+        default: 0
+    },
+    dislikes: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 

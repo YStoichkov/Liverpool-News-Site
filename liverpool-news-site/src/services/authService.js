@@ -28,12 +28,15 @@ exports.register = async (user) => {
     return jsonResult;
 }
 
-exports.isLoggedIn = () => {
-    // let cookie = new Cookies();
+exports.getCreatorName = async (userId) => {
+    let res = await fetch(`${baseUrl}/user/${userId}`);
 
-    // let result = cookie.get('auth_cookie');
+    let jsonResult = await res.json();
+    let fullName = jsonResult.firstName + ' ' + jsonResult.lastName;
+    return fullName;
+}
 
+exports.userIsCreator = async (creatorId, userId) => {
 
-    // return result;
 }
 

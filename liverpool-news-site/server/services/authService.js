@@ -23,6 +23,6 @@ exports.login = async ({ email, password }) => {
 
 exports.register = (userData) => User.create(userData);
 
-exports.getUser = (userId) => User.findById(userId).populate('myNews').lean();
+exports.getUser = (userId) => User.findById(userId).lean();
 
 exports.addNewsToUser = (userId, newsId) => User.findOneAndUpdate({ _id: userId }, { $push: { myNews: newsId } }, { runValidators: true });

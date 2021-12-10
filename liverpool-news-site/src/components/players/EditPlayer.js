@@ -1,9 +1,10 @@
 import { useHistory } from "react-router-dom";
 import * as playersService from '../../services/playerService.js'
+import { isAuth } from '../../hoc/isAuth.js'
 
-export function EditPlayer({
+const EditPlayer = ({
     location
-}) {
+}) => {
     let playerToEdit = location.state;
     let playerId = playerToEdit._id;
     let historyHook = useHistory();
@@ -62,3 +63,5 @@ export function EditPlayer({
         </>
     )
 }
+
+export default isAuth(EditPlayer)

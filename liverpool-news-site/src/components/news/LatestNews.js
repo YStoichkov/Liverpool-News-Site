@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
 
-export function LatestNews({
+const LatestNews = ({
     latestNews
-}) {
+}) => {
     return (
         <div className="column">
             <div className="wsk-cp-product">
@@ -24,3 +24,6 @@ export function LatestNews({
         </div>
     )
 }
+
+export default LatestNews;
+

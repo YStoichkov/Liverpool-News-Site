@@ -26,7 +26,7 @@ export function Navigation() {
             <nav className="main-nav overlay clearfix">
                 <NavLink className="blog-logo" to="/"><img src="/img/navbar-logo.jpg" alt="Fashion Critiques" /></NavLink>
                 <ul id="menu">
-                    {user ?
+                    {user.AUTH_COOKIE_NAME ?
                         userNavigation :
                         guestNavigation
                     }

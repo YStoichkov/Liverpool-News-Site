@@ -1,15 +1,15 @@
-import { NavLink, Redirect } from "react-router-dom"
+import { NavLink} from "react-router-dom"
 import { useState, useEffect } from 'react'
 import { NewsCard } from './NewsCard.js';
 import Loading from '../Loading.js';
 import * as newsService from '../../services/newsService.js'
-import { AuthContext } from '../../contexts/AuthContext.js'
-import { useContext } from 'react'
+import * as authService from '../../services/authService.js'
+import { isAuth } from '../../hoc/isAuth.js'
+import { Button } from 'react-bootstrap'
 
-export function AllNews() {
+const AllNews = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [news, setNews] = useState([]);
-    const { user } = useContext(AuthContext);
 
     useEffect(async () => {
         setTimeout(() => {
@@ -17,13 +17,21 @@ export function AllNews() {
         }, 1500);
         newsService.allNews()
             .then(data => {
+                data.map(async (x) => {
+                    let dateStringFormat = x.createdAt;
+                    let date = new Date(dateStringFormat);
+                    let result = date.toUTCString();
+                    x.createdAt = result;
+                    let creatorFullName = await authService.getCreatorName(x.creator);
+                    x['creatorFullName'] = creatorFullName;
+                })
                 setNews(data)
             })
     }, []);
 
-    const userNavigation = (
+    return (
         <>
-            <NavLink to="/news/add">Add News</NavLink>
+            <Button variant="info"><NavLink to="/news/add">Add News</NavLink></Button>{' '}
             <div className="shell">
                 <div className="container">
                     {isLoading === true
@@ -35,13 +43,8 @@ export function AllNews() {
                     }
                 </div>
             </div>
-        </>);
-
-    const guestNavigation = (<Redirect to='/login' />)
-
-    return (
-        <>
-            {user ? userNavigation : guestNavigation}
         </>
     )
 }
+
+export default isAuth(AllNews);

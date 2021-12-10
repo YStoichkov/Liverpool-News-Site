@@ -17,8 +17,13 @@ router.post('/add', async (req, res) => {
     }
 })
 router.get('/all', async (req, res) => {
-    let result = await newsService.getAll();
-    res.send(result);
+    try {
+        let result = await newsService.getAll();
+        res.send(result);
+    }
+    catch (err) {
+        res.send({ message: error.message, statusCode: 403 });
+    }
 })
 
 router.get('/details/:newsId', async (req, res) => {
@@ -45,7 +50,6 @@ router.post('/edit/:newsId', async (req, res) => {
 router.post('/delete/:newsId', async (req, res) => {
     try {
         let { userId, newsId } = req.body;
-        //TODO: .... if current user is creator of the news delete it 
         await newsService.deleteOne(newsId);
         res.status(200).json('ok');
     } catch (error) {
@@ -56,6 +60,28 @@ router.post('/delete/:newsId', async (req, res) => {
 router.get('/latest', async (req, res) => {
     let result = await newsService.getLatest();
     res.send(result);
+})
+
+router.post('/:newsId/upVote', async (req, res) => {
+    try {
+        let newsId = req.params.newsId;
+        let userId = req.body['userId'];
+        await newsService.upVote(newsId, userId);
+        res.status(200).json('ok');
+    } catch (error) {
+        res.status(404).json('error');
+    }
+})
+
+router.post('/:newsId/downVote', async (req, res) => {
+    try {
+        let newsId = req.params.newsId;
+        let userId = req.body['userId'];
+        await newsService.downVote(newsId, userId);
+        res.status(200).json('ok');
+    } catch (error) {
+        res.status(404).json('error');
+    }
 })
 
 module.exports = router;

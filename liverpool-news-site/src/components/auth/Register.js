@@ -1,10 +1,15 @@
 import { useHistory, Link } from 'react-router-dom'
 import { useState } from 'react'
 import * as authService from '../../services/authService.js'
+import { notAuth } from '../../hoc/isAuth.js'
 
-export function Register() {
-    const [notValid, setValid] = useState(false)
+const Register = () => {
+    const [notValid, setNotValid] = useState(false)
+    const [notValidInput, setNotValidInput] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
+    const [inputError, setInputError] = useState('');
     const historyHook = useHistory();
+
     const onRegisterHandler = (e) => {
         e.preventDefault();
         try {
@@ -15,44 +20,53 @@ export function Register() {
                 lastName,
                 email,
                 password,
+                rePass
             }
-            if (firstName !== '' && lastName !== '' && email !== '' && password !== '' && password == rePass) {
+            if (firstName !== '' && lastName !== '' && email !== '' && password !== '' && password !== '' && rePass !== '') {
                 authService.register(user)
                     .then(res => {
-                        historyHook.push('/login');
+                        if (res.statusCode === 200) {
+                            historyHook.push('/login')
+                        } else {
+                            setErrorMessage(res.message);
+                            setNotValid(true);
+                        }
+                    })
+                    .catch(err => {
+                        setErrorMessage(err.message)
+                        setNotValid(true);
                     })
             } else {
-                setValid(true);
+                setInputError(`Invalid input.Try again.`)
+                setNotValidInput(true);
             }
         } catch (error) {
-            console.error(error);
+            setErrorMessage(error.message)
+            setNotValid(true);
         }
     }
     return (
         <>
-            <br />
-            <br />
-            <br />
-            <br />
             <section id="register-page" className="content auth" method="POST">
                 <form id="register" onSubmit={onRegisterHandler}>
                     <div className="container">
                         <h1>Register</h1>
+                        <p className="errorField">
+                            {notValid && <span>{errorMessage}</span>}
+                        </p>
+                        <p className="errorField">
+                            {notValidInput && <span>{inputError}</span>}
+                        </p>
                         <label htmlFor="firstName">First Name:</label>
                         <input type="text" id="firstName" name="firstName" placeholder="Yanko" />
-                        {notValid && <span style={{ color: 'red' }}>Invalid First Name</span>}
                         <label htmlFor="lastName">Last Name:</label>
                         <input type="text" id="lastName" name="lastName" placeholder="Stoichkov" />
-                        {notValid && <span style={{ color: 'red' }}>Invalid Last Name</span>}
                         <label htmlFor="email">Email:</label>
                         <input type="email" name="email" id="email" placeholder="email@email.com" />
-                        {notValid && <span style={{ color: 'red' }}>Invalid email</span>}
                         <label htmlFor="password">Password:</label>
                         <input type="password" name="password" id="password" placeholder="******" />
-                        {notValid && <span style={{ color: 'red' }}>Invalid password</span>}
                         <label htmlFor="rePass">Confirm Password:</label>
                         <input type="password" name="rePass" id="rePass" placeholder="******" />
-                        {notValid && <span style={{ color: 'red' }}>Invalid password</span>}
                         <input className="btn submit" type="submit" value="Register" />
                         <p className="field">
                             <span>If you already have profile click <Link to="/login">here</Link></span>
@@ -63,3 +77,5 @@ export function Register() {
         </>
     );
 };
+
+export default notAuth(Register);

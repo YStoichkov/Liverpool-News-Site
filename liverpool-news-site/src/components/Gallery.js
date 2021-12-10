@@ -1,8 +1,11 @@
 import { useEffect, useState, React } from 'react'
 import { Image } from 'cloudinary-react';
 import Loading from '../components/Loading';
+import { isAuth } from '../hoc/isAuth.js'
 
-export function Gallery() {
+const Gallery = ({
+    user
+}) => {
     const [fileInputState, setFileInputState] = useState('');
     const [previewSource, setPreviewSource] = useState('');
     const [imageIds, setImageIds] = useState('');
@@ -46,6 +49,7 @@ export function Gallery() {
         try {
             const res = await fetch('/gallery/images');
             const data = await res.json();
+            console.log(data);
             setImageIds(data);
         } catch (error) {
             console.error(error)
@@ -62,24 +66,25 @@ export function Gallery() {
     return (
         <>
             <div className="upload-image">
-                <h1>Upload Image</h1>
+                <h1 className="center" ><font face="Brush Script MT" size="+7">Upload Image</font></h1>
                 <form onSubmit={handleSubmitFile} className="upload-image-form">
                     <input type="file" name="image" onChange={handleFileInputChange} value={fileInputState} className="form-input" />
                     <button className="btn" type="submit">Submit image</button>
                 </form>
                 {previewSource && (
                     <>
-                        <h1>Preview image </h1>
+                        <h3 className="center" ><font face="Brush Script MT" size="+7">Preview Image</font></h3>
                         <img className="image-preview" src={previewSource} alt="chosen" style={{ height: '300px' }} />
                     </>
                 )}
             </div>
+            <h1 className="center" ><font face="Brush Script MT" size="+7">All Gallery Images</font></h1>
             <div className="container">
                 <div className="grid">
                     {isLoading === true
                         ? <Loading />
                         : imageIds.map((imageId, index) =>
-                            <Image key={index} cloudName="dqj4zmx97" publicId={imageId} width="300" crop="scale" className=".bg-image .hover-zoom" alt="image"/>
+                            <Image key={index} cloudName="dqj4zmx97" publicId={imageId} width="300" crop="scale" alt="image" />
                         )
                     }
                 </div>
@@ -87,3 +92,5 @@ export function Gallery() {
         </>
     )
 }
+
+export default isAuth(Gallery);

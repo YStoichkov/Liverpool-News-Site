@@ -1,9 +1,11 @@
 import { NavLink } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import Loading from '../Loading.js';
+import { isAuth } from '../../hoc/isAuth.js'
 import { PlayerCard } from './PlayerCard.js';
 
-export function AllPlayers() {
+const AllPlayers = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [players, setPlayers] = useState([]);
     useEffect(async () => {
@@ -19,7 +21,7 @@ export function AllPlayers() {
     return (
         <>
             <div>
-                <NavLink to="/add-player">Add Player</NavLink>
+                <Button variant="info"><NavLink to="/players/add">Add Players</NavLink></Button>{' '}
                 <div className="container">
                     {isLoading == true
                         ? <Loading />
@@ -35,3 +37,5 @@ export function AllPlayers() {
         </>
     )
 }
+
+export default isAuth(AllPlayers);
