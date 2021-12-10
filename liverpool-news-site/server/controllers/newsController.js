@@ -1,17 +1,19 @@
 const router = require('express').Router();
 const newsService = require('../services/newsService.js')
+const authService = require('../services/authService.js');
 
 router.post('/add', async (req, res) => {
     try {
         const { title, content, image, userId } = req.body
-        const news = {
+        const newsToAdd = {
             title,
             content,
             image,
             creator: userId,
         };
-        await newsService.create(news);
-        res.status(200).json('ok');
+        let news = await newsService.create(newsToAdd);
+        await authService.addPostToUser(userId, news._id);
+        res.status(200).json({ statusCode: 200, message: 'ok' });
     } catch (err) {
         res.status(404).json('error');
     }
@@ -41,7 +43,7 @@ router.post('/edit/:newsId', async (req, res) => {
         let { title, content, image } = req.body;
         let newsId = req.params.newsId;
         await newsService.updateOne(newsId, { title, content, image })
-        res.status(200).json('ok');
+        res.status(200).json({ statusCode: 200, message: 'ok' });
     } catch (error) {
         res.status(404).json('error')
     }

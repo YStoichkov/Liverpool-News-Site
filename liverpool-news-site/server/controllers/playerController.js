@@ -18,7 +18,7 @@ router.post('/add', async (req, res) => {
             addedByUser: userId
         }
         await playerService.create({ ...player });
-        res.status(200).json('ok');
+        res.status(200).json({ statusCode: 200, message: 'ok' });
     } catch (err) {
         res.status(404).json('error');
     }
@@ -48,9 +48,9 @@ router.post('/edit/:playerId', async (req, res) => {
         let { firstName, lastName, position, shirtNumber, dateOfBirth, apperances, goals, playerImage, description } = req.body;
         let playerId = req.params.playerId;
         await playerService.updateOne(playerId, { firstName, lastName, position, shirtNumber, dateOfBirth, apperances, goals, playerImage, description });
-        res.status(200).json('ok');
+        res.status(200).json({ statusCode: 200, message: 'ok' });
     } catch (error) {
-        res.status(404).json('error');
+        res.status(400).json({ statusCode: 400, message: error.message });
     }
 })
 

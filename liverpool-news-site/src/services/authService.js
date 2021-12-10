@@ -36,7 +36,4 @@ exports.getCreatorName = async (userId) => {
     return fullName;
 }
 
-exports.userIsCreator = async (creatorId, userId) => {
-
-}
 

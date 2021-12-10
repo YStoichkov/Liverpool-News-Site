@@ -25,7 +25,7 @@ const EditPlayer = ({
         }
         playersService.editPlayer(playerData, playerId)
             .then(res => {
-                if (res == 'OK') {
+                if (res.message === 'ok') {
                     historyHook.push(`/players/details/${playerId}`)
                 }
             })

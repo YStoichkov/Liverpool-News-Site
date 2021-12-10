@@ -1,11 +1,13 @@
 import Cookies from 'universal-cookie'
 import { useJwt } from 'react-jwt'
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as newsService from '../../services/newsService.js'
 import { isAuth } from '../../hoc/isAuth.js'
-import { Button } from 'react-bootstrap'
 
 const AddNews = () => {
+    const [notValid, setNotValid] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
     let cookies = new Cookies();
     let authCookie = cookies.get('auth_cookie');
     const { decodedToken } = useJwt(authCookie.AUTH_COOKIE_NAME);
@@ -14,25 +16,36 @@ const AddNews = () => {
     let historyHook = useHistory();
     const onNewsSubmitHandler = (e) => {
         e.preventDefault();
-        let formData = new FormData(e.currentTarget);
-        let title = formData.get('title');
-        let content = formData.get('content');
-        let image = formData.get('image');
+        try {
+            let formData = new FormData(e.currentTarget);
+            let title = formData.get('title');
+            let content = formData.get('content');
+            let image = formData.get('image');
 
-        let newsData = {
-            title,
-            content,
-            image,
-            userId
-        }
-        newsService.createNews(newsData)
-            .then(res => {
-                if (res === 'ok') {
-                    historyHook.push('/news/all')
-                } else {
-                    console.log('Error')
+            if (title !== '' && content !== '' && image !== '') {
+                let newsData = {
+                    title,
+                    content,
+                    image,
+                    userId
                 }
-            })
+                newsService.createNews(newsData)
+                    .then(res => {
+                        if (res.message === 'ok') {
+                            historyHook.push('/news/all')
+                        } else {
+                            setErrorMessage(`Invalid input`)
+                            setNotValid(true);
+                        }
+                    })
+            } else {
+                setErrorMessage(`Invalid input`)
+                setNotValid(true);
+            }
+        } catch (error) {
+            setErrorMessage(`Invalid input`)
+            setNotValid(true);
+        }
     }
 
     return (
@@ -42,6 +55,9 @@ const AddNews = () => {
                 <form id="register" onSubmit={onNewsSubmitHandler} >
                     <div className="container">
                         <h1>Add News</h1>
+                        <p className="errorField">
+                            {notValid && <span>{errorMessage}</span>}
+                        </p>
                         <label htmlFor="title">Title</label>
                         <input type="text" id="title" name="title" />
                         <label htmlFor="content">Content</label>

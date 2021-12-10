@@ -1,4 +1,5 @@
 import Cookies from "universal-cookie";
+import { useState } from "react";
 import { useJwt } from 'react-jwt'
 import { useHistory } from 'react-router-dom';
 import * as playerService from '../../services/playerService.js';
@@ -8,34 +9,48 @@ const AddPlayer = () => {
     let historyHook = useHistory();
     let cookies = new Cookies();
     let authCookie = cookies.get('auth_cookie');
-    const { decodedToken, isExpired } = useJwt(authCookie);
+    const [notValid, setNotValid] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
+    const { decodedToken } = useJwt(authCookie);
     let userId = decodedToken?._id;
     const onFormSubmit = (e) => {
         e.preventDefault();
-        let formData = new FormData(e.currentTarget);
-        let { firstName, lastName, position, shirtNumber, dateOfBirth, apperances, goals, playerImage, description } = Object.fromEntries(formData);
-        let playerData = {
-            firstName,
-            lastName,
-            position,
-            shirtNumber,
-            dateOfBirth,
-            apperances,
-            goals,
-            playerImage,
-            description,
-            userId,
-        }
-        playerService.createPlayer(playerData)
-            .then(res => {
-                if (res === 'ok') {
-                    historyHook.push('/players/all')
-                } else {
-                    console.log('Error')
+        try {
+            let formData = new FormData(e.currentTarget);
+            let { firstName, lastName, position, shirtNumber, dateOfBirth, apperances, goals, playerImage, description } = Object.fromEntries(formData);
+            if (firstName !== '' && lastName !== '' && position !== '' && shirtNumber !== '' && dateOfBirth !== '' && apperances !== ''
+                && goals != '', playerImage !== '' && description !== '') {
+                let playerData = {
+                    firstName,
+                    lastName,
+                    position,
+                    shirtNumber,
+                    dateOfBirth,
+                    apperances,
+                    goals,
+                    playerImage,
+                    description,
+                    userId,
                 }
-            })
+                playerService.createPlayer(playerData)
+                    .then(res => {
+                        if (res.message === 'ok') {
+                            historyHook.push('/players/all')
+                        } else {
+                            setErrorMessage(`Invalid input`)
+                            setNotValid(true);
+                        }
+                    })
+            }
+            else {
+                setErrorMessage(`Invalid input`)
+                setNotValid(true);
+            }
+        } catch (error) {
+            setErrorMessage(`Invalid input`)
+            setNotValid(true);
+        }
     }
-
     return (
         <>
             <br />
@@ -44,6 +59,9 @@ const AddPlayer = () => {
                 <form id="contact-form" onSubmit={onFormSubmit}>
                     <div className="container">
                         <h1>Add Player</h1>
+                        <p className="errorField">
+                            {notValid && <span>{errorMessage}</span>}
+                        </p>
                         <label htmlFor="firstName">First Name</label>
                         <input type="text" id="firstName" name="firstName" />
                         <label htmlFor="lastName">Last Name</label>

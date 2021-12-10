@@ -93,7 +93,7 @@ const SingleNews = ({ match }) => {
                 },
                 body: JSON.stringify({ userId })
             })
-                .then(res => console.log(res))
+                .then(() => setVoted(true))
         } else {
             setVoted(true);
         }
@@ -110,9 +110,9 @@ const SingleNews = ({ match }) => {
                 },
                 body: JSON.stringify({ userId })
             })
-                .then(res => console.log(res))
+                .then(() => setVoted(true))
         } else {
-            setVoted(true);
+            return setVoted(true);
         }
     }
 
@@ -127,12 +127,12 @@ const SingleNews = ({ match }) => {
                             <span></span><span></span><span></span>
                         </div>
                         <section className="post-meta">
-                            <time className="post-date" >Added: {news.createdAt} </time>
+                            <time className="post-date" >Added: {news.createdAt}&nbsp; </time>
                             <span>Author: {news.creatorFullName}</span> |
                             {news.creator === userId ?
                                 <>
                                     <button className="btn btn-warning" onClick={onDeleteHandler}>Delete News</button>
-                                    <Link to={{ pathname: `/ news / edit / ${news._id}`, state: news }}><button className="btn btn-primary">Edit News</button></Link>
+                                    <Link to={{ pathname: `/news/edit/${news._id}`, state: news }}><button className="btn btn-primary">Edit News</button></Link>
                                 </> : null}
                         </section>
                     </div>
@@ -144,7 +144,7 @@ const SingleNews = ({ match }) => {
                                 <i className="far fa-thumbs-down fa-5x" onClick={(e) => disslikePost(e)} style={{ cursor: 'pointer', color: 'red' }}></i>
                                 <h3><strong style={{ color: 'white' }}>Likes: {news?.likes}</strong></h3>
                                 <h3><strong style={{ color: 'white' }}>Dislikes: {news?.dislikes}</strong></h3>
-                                {voted && <h3>You've already voted for this news</h3>}
+                                {voted && <h3 style={{ color: 'white' }}>You've already voted for this news</h3>}
                             </div>
                         </> : null
                     }

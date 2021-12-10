@@ -1,13 +1,11 @@
-import { Table, Button, Modal, Input, Form } from 'antd'
+import { Table, Modal, Input, Form } from 'antd'
 import 'antd/dist/antd.css'
 import { useState, useEffect } from 'react'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 export function LeagueTable() {
     const [isEditing, setIsEditing] = useState(false);
-    const [isAdding, setIsAdding] = useState(false);
     const [editingTeam, setEditingTeam] = useState(null);
-    const [addingTeam, setAddingTeam] = useState(null);
     const [dataSource, setDataSource] = useState([])
 
     useEffect(() => {

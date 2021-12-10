@@ -1,34 +1,46 @@
 import { useHistory, Redirect } from "react-router-dom";
 import * as newsService from '../../services/newsService.js'
 import { AuthContext } from '../../contexts/AuthContext.js'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { isAuth } from '../../hoc/isAuth.js'
 
 const EditNews = ({
     location
 }) => {
     const { user } = useContext(AuthContext);
+    const [notValid, setNotValid] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
     let newsToEdit = location.state;
     let newsId = newsToEdit?._id;
     let historyHook = useHistory();
     const onNewsSubmitHandler = (e) => {
         e.preventDefault();
-        let formData = new FormData(e.currentTarget);
-        let { title, content, image } = Object.fromEntries(formData);
-        let newsData = {
-            title,
-            content,
-            image,
-            newsId
-        }
-        newsService.editNews(newsData, newsId)
-            .then(res => {
-                if (res === 'ok') {
-                    historyHook.push('/news/all')
-                } else {
-                    console.log('Error')
+        try {
+            let formData = new FormData(e.currentTarget);
+            let { title, content, image } = Object.fromEntries(formData);
+            if (title !== '' && content !== '' && image !== '') {
+                let newsData = {
+                    title,
+                    content,
+                    image,
+                    newsId
                 }
-            })
+                newsService.editNews(newsData, newsId)
+                    .then(res => {
+                        if (res.message === 'ok') {
+                            historyHook.push('/news/all')
+                        } else {
+                            console.log('Error')
+                        }
+                    })
+            } else {
+                setErrorMessage(`Invalid input`)
+                setNotValid(true);
+            }
+        } catch (error) {
+            setErrorMessage(`Invalid input`)
+            setNotValid(true);
+        }
     }
     return (
         <>
@@ -42,6 +54,9 @@ const EditNews = ({
                         <form id="register" onSubmit={onNewsSubmitHandler} >
                             <div className="container">
                                 <h1>Edit News</h1>
+                                <p className="errorField">
+                                    {notValid && <span>{errorMessage}</span>}
+                                </p>
                                 <label htmlFor="title">Title</label>
                                 <input type="text" id="title" name="title" defaultValue={newsToEdit.title} />
                                 <label htmlFor="content">Content</label>
